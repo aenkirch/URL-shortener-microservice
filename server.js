@@ -22,7 +22,7 @@ app.use(cors());
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlEncoded({extended: false}));
+app.use( bodyParser.urlEncoded( {extended: false} ) );
 
 const Schema = mongoose.Schema;
 
@@ -33,11 +33,12 @@ let URL = new Schema({
 
 
 app.post('/api/shorturl/new:url', (req, res) => {
-  let paramURL = 
+  let paramURL = req.params.url;
   
   let url = new URL(
     {
-      long: url
+      long: paramURL,
+      short: URL.count()
     }
   );
 });
