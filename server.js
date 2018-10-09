@@ -21,9 +21,6 @@ app.use(cors());
 
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.json());
-app.use( bodyParser.urlEncoded( {extended: false} ) );
-
 const Schema = mongoose.Schema;
 
 let URL = new Schema({
@@ -31,6 +28,7 @@ let URL = new Schema({
   short: {type: String, required: true}
 });
 
+app.use(bodyParser.json());
 
 app.post('/api/shorturl/new:url', (req, res) => {
   let paramURL = req.params.url;
