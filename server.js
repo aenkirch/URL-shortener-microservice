@@ -30,15 +30,19 @@ let URL = new Schema({
 
 app.use(bodyParser.json());
 
-app.post('/api/shorturl/new:url', (req, res) => {
+app.route('/api/shorturl/new:url')
+
+  .post( (req, res) => {
   let paramURL = req.params.url;
   
-  let url = new URL(
+  res.send(URL.count());
+  
+  /*let url = new URL(
     {
       long: paramURL,
       short: URL.count()
     }
-  );
+  );*/
 });
 
 
