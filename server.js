@@ -21,28 +21,28 @@ app.use(cors());
 
 const bodyParser = require('body-parser');
 
-const Schema = mongoose.Schema;
-
-let URL = new Schema({
+const schema = new mongoose.Schema({
   long: {type: String, required: true},
   short: {type: String, required: true}
-});
+})
+
+var URL = mongoose.model("URL", schema);
 
 app.use(bodyParser.json());
 
-app.route('/api/shorturl/new:url')
+app.route('/api/shorturl/new')
 
   .post( (req, res) => {
-  let paramURL = req.params.url;
-  
-  res.send(URL.count());
-  
-  /*let url = new URL(
-    {
-      long: paramURL,
-      short: URL.count()
-    }
-  );*/
+    let paramURL = req.body.url;
+
+    res.send(URL.count({}));
+
+    /*let url = new URL(
+      {
+        long: paramURL,
+        short: URL.count()
+      }
+    );*/
 });
 
 
