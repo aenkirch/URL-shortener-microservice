@@ -5,6 +5,7 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
 var cors = require('cors');
+var dns = require('dns');
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
@@ -35,14 +36,14 @@ app.route('/api/shorturl/new')
   .post( (req, res) => {
     var paramURL = req.body.url;
   
-  
+    //gérer un URL invalide
+    if (!isValid(paramURL)) { res.json({ "error": "invalid URL" }) }
+
     //gérer un objet déjà présent en base
     var objetDejaPresent = URL.find({long: paramURL}, (err, data) => {
-      console.log("
-    } );
-  
-    if (objetDejaPresent)
-      res.json(objetDejaPresent);
+      if (err) {console.log("nouvel objet")}
+      res.json(data);
+    });
     
     //création de nouvel objet
     URL.count({}, (err, data) => {
@@ -63,6 +64,12 @@ app.route('/api/shorturl/new')
     });
 });
 
+function isValid (url) {
+  dns.lookup(url, (err, data) => {
+    if (err) {return false};
+    return true;
+  });
+}
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
