@@ -34,7 +34,17 @@ app.route('/api/shorturl/new')
 
   .post( (req, res) => {
     var paramURL = req.body.url;
-
+  
+  
+    //gérer un objet déjà présent en base
+    var objetDejaPresent = URL.find({long: paramURL}, (err, data) => {
+      console.log("
+    } );
+  
+    if (objetDejaPresent)
+      res.json(objetDejaPresent);
+    
+    //création de nouvel objet
     URL.count({}, (err, data) => {
               if (err) { res.send("error"); }
 
@@ -44,6 +54,10 @@ app.route('/api/shorturl/new')
                   short: data
                 }
               );
+      
+              url.save( (err, data) => {
+                if (err) { res.send("error when creating object"); }
+              });
       
               res.json(url);
     });
