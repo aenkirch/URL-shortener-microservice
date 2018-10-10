@@ -33,16 +33,20 @@ app.use(bodyParser.json());
 app.route('/api/shorturl/new')
 
   .post( (req, res) => {
-    let paramURL = req.body.url;
+    let paramURL = req.body.original_url;
 
-    res.send(URL.count({}));
+    URL.count({}, (err, data) => {
+              if (err) { res.send("error"); }
 
-    /*let url = new URL(
-      {
-        long: paramURL,
-        short: URL.count()
-      }
-    );*/
+              let url = new URL(
+                {
+                  long: paramURL,
+                  short: data
+                }
+              );
+      
+              res.json(url);
+    });
 });
 
 
