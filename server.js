@@ -35,16 +35,18 @@ app.route('/api/shorturl/new')
     var paramURL = req.body.url;
   
     //gérer un id portant sur un URL en base
-    URL.find({short: paramURL}, (err, data) => {
-      if (err) {console.log("not refering to a URL in db")}
-      res.json(data);
-    });
+    //if ( Number.isInteger( parseInt(paramURL) ) ){
+      URL.find({short: parseInt(paramURL)}, (err, data) => {
+        if (err) {res.json("not refering to a URL in db")}
+        res.json(data);
+      });
+    //}
   
     //gérer un URL invalide
     if (!isValid(paramURL)) { res.json({ "error": "invalid URL" }) }
 
     //gérer un objet déjà présent en base
-    var objetDejaPresent = URL.find({long: paramURL}, (err, data) => {
+    URL.find({long: paramURL}, (err, data) => {
       if (err) {console.log("nouvel objet")}
       res.json(data);
     });
