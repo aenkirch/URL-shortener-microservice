@@ -29,18 +29,21 @@ const schema = new mongoose.Schema({
 
 var URL = mongoose.model("URL", schema);
 
+app.get('/api/shorturl/:param', (req, res) => {
+  var paramRecherche = req.params;
+  
+  if ( Number.isInteger( parseInt(paramRecherche) ) ){
+    URL.find({short: parseInt(paramRecherche)}, (err, data) => {
+      if (err) {res.json("not refering to a URL in db")}
+      res.json(data);
+    });
+  }
+});
+
 app.route('/api/shorturl/new')
 
   .post( (req, res) => {
     var paramURL = req.body.url;
-  
-    //gérer un id portant sur un URL en base
-    //if ( Number.isInteger( parseInt(paramURL) ) ){
-      URL.find({short: parseInt(paramURL)}, (err, data) => {
-        if (err) {res.json("not refering to a URL in db")}
-        res.json(data);
-      });
-    //}
   
     //gérer un URL invalide
     if (!isValid(paramURL)) { res.json({ "error": "invalid URL" }) }
