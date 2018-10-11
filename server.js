@@ -50,7 +50,7 @@ app.route('/api/shorturl/new')
 
     //gérer un objet déjà présent en base
     URL.find({long: paramURL}, (err, data) => {
-      if (data) {res.json(data);}
+      if (Object.keys(data).length != 0) {res.json(data);}
     });
     
     //création de nouvel objet
