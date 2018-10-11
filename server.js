@@ -4,7 +4,7 @@ var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var cors = require('cors');
-var http = require('request');
+var validUrl = require('valid-url');
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
@@ -33,6 +33,12 @@ app.route('/api/shorturl/new')
 
   .post( (req, res) => {
     var paramURL = req.body.url;
+  
+    //gérer un id portant sur un URL en base
+    URL.find({short: paramURL}, (err, data) => {
+      if (err) {console.log("not refering to a URL in db")}
+      res.json(data);
+    });
   
     //gérer un URL invalide
     if (!isValid(paramURL)) { res.json({ "error": "invalid URL" }) }
@@ -63,12 +69,8 @@ app.route('/api/shorturl/new')
 });
 
 function isValid (url) {
-  http.get(url, (err, data) => {
-    if (err) {return false};
-  });
-  https.get(url, (err, data) => {
-    if (err) {return false};
-  });                               // TROUVER UN MOYEN DE SUPPORTER LES HTTP ET LES HTTPS  !!!!!!!!!!!!!!!!!
+  if (!validUrl.isUri(url))
+    return false;
   return true;
 };
 
