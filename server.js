@@ -3,10 +3,8 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-
 var cors = require('cors');
-var http = require('http');
-var https = require('https');
+var http = require('request');
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
@@ -22,6 +20,7 @@ mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use(bodyParser.json());
 
 const schema = new mongoose.Schema({
   long: {type: String, required: true},
@@ -29,8 +28,6 @@ const schema = new mongoose.Schema({
 })
 
 var URL = mongoose.model("URL", schema);
-
-app.use(bodyParser.json());
 
 app.route('/api/shorturl/new')
 
