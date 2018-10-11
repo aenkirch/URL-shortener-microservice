@@ -29,13 +29,13 @@ const schema = new mongoose.Schema({
 
 var URL = mongoose.model("URL", schema);
 
-app.get('/api/shorturl/:param', (req, res) => {
-  var paramRecherche = req.params;
+app.get('/api/shorturl/:id', (req, res) => {
+  var paramRecherche = req.params.id;
   
   if ( Number.isInteger( parseInt(paramRecherche) ) ){
     URL.find({short: parseInt(paramRecherche)}, (err, data) => {
       if (err) {res.json("not refering to a URL in db")}
-      res.json(data);
+      res.redirect(data[0].long);
     });
   }
 });
@@ -50,8 +50,7 @@ app.route('/api/shorturl/new')
 
     //gérer un objet déjà présent en base
     URL.find({long: paramURL}, (err, data) => {
-      if (err) {console.log("nouvel objet")}
-      res.json(data);
+      if (data) {res.json(data);}
     });
     
     //création de nouvel objet
